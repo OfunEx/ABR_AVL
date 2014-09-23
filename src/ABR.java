@@ -9,9 +9,17 @@ public class ABR<T> {
 		
 	}
 	
+	public T getValeur(){
+		return valeur;
+	}
+	
+	
+	
 	public void insertionABR(){
 		
 	}
 	
-	public void suppressionABR
+	public void suppressionABR(){
+		
+	}
 }
