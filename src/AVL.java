@@ -1,161 +1,114 @@
-import java.awt.*;
-import java.util.*;
 
 // Classe des Arbres H-Equilibrés de recherche ou AVL 
-class ArbreAVL extends ABR {
+class AVL<T extends Comparable<T>>{
 
-    // Constructeur
-    public ArbreAVL(Object val) {
-        valeur = val;
-        filsg=null;
-        filsd=null;
-        frere = false;
-        typeElem=val.getClass();
-    }
-
-    //fonction de calcul du déséquilibre identique à celle des arbres H-équilibrés
-    public int desequilibre() {
-        if (filsg==null) {
-            if (filsd==null) return 0;
-            else return (-filsd.profondeur());
+	public AVL parent;
+	public T valeur;
+	public AVL filsG;
+	public AVL filsD;
+	public int deseq;
+	
+	public AVL(T valeur){
+		this.parent = null;
+		this.valeur = valeur;
+		this.filsG = null;
+		this.filsD = null;	
+		this.deseq = 0;
+	}
+	
+	public AVL(AVL parent, T valeur, AVL filsG, AVL filsD){
+		this.parent = parent;
+		this.valeur = valeur;
+		this.filsG = filsG;
+		this.filsD = filsD;
+		this.deseq = 0;
+	}
+	
+	public T recupValeur(){
+		return valeur;
+	}
+	
+	//Principe : cette fonction permet de savoir si un sous arbre est une feuille
+	//Entrée : un arbre de type AVL
+	//Sortie : une valeur booleene Vrai ou Fausse qui indique si un arbre est une feuille
+	public boolean estFeuille(AVL arbre){
+		boolean resultat = false;
+		
+		if(arbre.filsG == null && arbre.filsD == null){
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	//Principe : cette procedure permet de calculer le desequilibre d'un arbre et modifie l'attribu
+	//deseq dans la structure de données pour pouvoir retenir la valeur de desequilibre
+	//Entrée : un arbre de type AVL
+	//Sortie : l'attribut deseq est modifié
+	public void calculDesequilibre(AVL arbre){
+		int hauteurMaxG = recupLongueurMaxG(arbre);
+		int hauteurMaxD = recupLongueurMaxD(arbre);
+		int desequilibre = hauteurMaxG - hauteurMaxD;
+		
+		arbre.deseq = desequilibre;
+	}
+	
+	//Principe : 
+	public int profondeur() {
+		int resultat;
+		
+        if (filsG==null) {
+            if (filsD==null){
+            	resultat = 0;
+            } 
+            else{
+            	resultat = (1+filsD.profondeur());
+            } 
         }
         else {
-            if (filsd==null) return (filsg.profondeur());
-                else return (filsg.profondeur() - filsd.profondeur());
-        }
-    }
-    
-    //fonction de rééquilibrage de tout l'arbre identique à celle des arbres H-équilibrés      
-    public ArbreAVL equilibrage() {
-        
-        Arbre tmp=this;
-        if (tmp.estFeuille()) return ((ArbreAVL)tmp);
-        else {
-            
-            int desequilibre = ((ArbreAVL)tmp).desequilibre();
-            if (desequilibre>=1) {
-                if (tmp.filsg!=null) {
-                        if (((ArbreAVL)tmp.filsg).desequilibre()<0)
-                            tmp.filsg = tmp.filsg.rotationG();
-                        tmp = tmp.rotationD();
-                }
+            if (filsD==null){
+            	resultat = (1+filsG.profondeur());
             }
-            
-            if (desequilibre<=-1) {
-                    if (tmp.filsd!=null) {
-                            if (((ArbreAVL)tmp.filsd).desequilibre()>0)
-                                tmp.filsd = tmp.filsd.rotationD();
-                            tmp = tmp.rotationG();
-                    }
+            else{
+                resultat = (1+java.lang.Math.max(filsD.profondeur(),filsG.profondeur()));
             }
-                
-            if (tmp.filsg!=null) tmp.filsg = ((ArbreAVL)tmp.filsg).equilibrage();
-            if (tmp.filsd!=null) tmp.filsd = ((ArbreAVL)tmp.filsd).equilibrage();
-        }
-        return (ArbreAVL)tmp;
-    }
-            
-    // Comme les AVL sont des arbres Héquilibrés de recherche l'ajout se fait de la même manière que pour les arbres de recherche
-    public void ajouterElt(Object val) throws TypeIncompatibleException{
-        if (val.getClass()!=typeElem ) throw new TypeIncompatibleException();    
-        if (((Comparable)val).compareTo(this.valeur)!=0)    
-            if (((Comparable)val).compareTo(this.valeur)<0) {
-                if (filsg==null) {
-                    filsg = new ArbreAVL(val);
-                }
-                else {
-                    filsg.ajouterElt(val);
-                }
-            }
-            else {
-                if (filsd==null) {
-                    filsd = new ArbreAVL(val);
-                }
-                else {
-                    filsd.ajouterElt(val);
-                }
-            }      
-    }
-        
-    // Pour ajouter un élément, il faut l'ajouter puis rééquilibrer l'arbre
-    public ArbreAVL ajouter(Object val) {
-        Arbre res=this;
-        res.ajouterElt(val);
-        return ((ArbreAVL)res).equilibrage();
-    }
-    
-    // Les trois dernières fonctions sont identiques à celles des arbres binaire de recherche
-    // Suppression de l'élément le plus à droite du fils gauche
-    private Object supprimerMaxFG() {
-        Object max=null;
-        Arbre tmp = this;
-        Arbre père=null;
-        if (filsg.filsd==null) {
-                max=filsg.valeur;
-                filsg=filsg.filsg;
-            }
-        else {
-                tmp = tmp.filsg;
-                while (tmp.filsd!=null) {
-                    père = tmp;
-                    tmp=tmp.filsd;
-                }
-                max = tmp.valeur;
-                père.filsd = tmp.filsd;
-            
         }        
-        return max;
+        return resultat;
     }
-    
-    // Suppression de l'élément le plus à gauche du fils droit
-    private Object supprimerMinFD() {
-        Object max=null;
-        Arbre tmp = this;
-        Arbre père=null;
-        if (filsd.filsg==null) {
-                max=filsd.valeur;
-                filsd=filsd.filsd;
-            }
-        else {
-                tmp = tmp.filsd;
-                while (tmp.filsg!=null) {
-                    père = tmp;
-                    tmp=tmp.filsg;
-                }
-                max = tmp.valeur;
-                père.filsg = tmp.filsg;
-            
-        }        
-        return max;
-    }
-    
-    // Suppression de l'élément désiré
-    public Arbre supprimer(Object elt) {
-        if (this!=null)
-                if (((Comparable)elt).compareTo(this.valeur)==0) {
-                    Object max;
-                    if (this.filsg!=null) {
-                        max = this.supprimerMaxFG();
-                        this.valeur = max;
-                    }
-                    else if (this.filsd==null) return null;
-                         else {
-                        max = this.supprimerMinFD();
-                        this.valeur = max;
-                        }
-                }
-                else if (((Comparable)elt).compareTo(this.valeur)<0)
-                     {
-                         this.filsg = filsg.supprimer(elt);
-                     }
-                     else
-                     {
-                        this.filsd = filsd.supprimer(elt);
-                     }
-        // On équilibre l'arbre résultant de la suppression et on le renvoie
-        ArbreAVL tmp=this;
-        tmp = ((ArbreAVL)tmp).equilibrage();
-        return tmp;
-    }
+	
+	public int recupLongueurMaxG(AVL arbre){
+		int hauteurMaxG = 1;
+		hauteurMaxG += arbre.filsG.profondeur();
+		return hauteurMaxG;
+	}
+	
+	public int recupLongueurMaxD(AVL arbre){
+		int hauteurMaxD = 1;
+		hauteurMaxD += arbre.filsD.profondeur();
+		return hauteurMaxD;
+	}
+	
+	public void insertionAVL(AVL arbre){
+		
+		if(arbre.valeur.compareTo(this.valeur) > 0 ){
+			if(this.filsD == null){
+				this.filsD = arbre;
+			}
+			else{
+				this.filsD.insertionAVL(arbre);
+			}
+		}
+		else{
+			if(this.filsG == null){
+				this.filsG = arbre;
+			}
+			else{
+				this.filsG.insertionAVL(arbre);
+			}
+		}
+	}
+	
+	public void suppressionAVL(){
+		
+	}
 
 }
