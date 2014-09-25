@@ -172,12 +172,12 @@ class AVL<T extends Comparable<T>>{
 		//Rotation gauche-gauche:
 		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) > 0)
 			arbre.rotationG();
-		//Rotation gauche-droite:
-		else if(arbre.deseq > 1 && element.compareTo(arbre.filsG) < 0)
-			arbre.rotationGD();
 		//Rotation droite-gauche:
-		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) > 0)
+		else if(arbre.deseq > 1 && element.compareTo(arbre.filsG) > 0)
 			arbre.rotationDG();
+		//Rotation gauche-droite:
+		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) < 0)
+			arbre.rotationGD();
 
 
     	return res;
