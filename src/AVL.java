@@ -209,39 +209,48 @@ class AVL<T extends Comparable<T>>{
 	
 	public void suppressionAVL(T element){
 		//recherche element
-		if(estFeuille(this)){
+		AVL eltrouve= this.rechercheNoeud(element);
+		
+		if(estFeuille(eltrouve)){
 			//on supprime
-			this = new AVL(null);
+			eltrouve.parent = null;
+			eltrouve.valeur = null;
+			eltrouve.filsG = null;
+			eltrouve.filsD = null;
 		}
 		
-		else if(this.filsG==null){
+		else if(eltrouve.filsG==null){
 			//si x n'a qu'un fils, on le remplace par son fils
-			this.parent = this.parent;
-			this.valeur = (T)this.filsD.valeur;
-			this.filsG = this.filsD.filsG;
-			this.filsD = this.filsD.filsG;
+			AVL tempo = new AVL(eltrouve.parent, (T)eltrouve.filsD.valeur, eltrouve.filsD.filsG, eltrouve.filsD.filsD);
+			eltrouve.parent = eltrouve.parent;
+			eltrouve.valeur = (T)eltrouve.filsD.valeur;
+			eltrouve.filsG = eltrouve.filsD.filsG;
+			eltrouve.filsD = eltrouve.filsD.filsG;
 		}
-		else if(this.filsD==null){
+		else if(eltrouve.filsD==null){
 			//si x n'a qu'un fils, on le remplace par son fils
-			this.parent = this.parent;
-			this.valeur = (T)this.filsG.valeur;
-			this.filsG = this.filsG.filsG;
-			this.filsD = this.filsG.filsD;
+			AVL tempo = new AVL(eltrouve.parent, (T)eltrouve.filsG.valeur, eltrouve.filsG.filsG, eltrouve.filsG.filsD);
+			eltrouve.parent = tempo.parent;
+			eltrouve.valeur = (T)tempo.valeur;
+			eltrouve.filsG = tempo.filsG;
+			eltrouve.filsD = tempo.filsD;
 		}
 		else{
 			//si x a 2 fils, on le remplace par le plus petit element de son sous arbre droit
-			AVL tempo2 = this.filsD;
+			AVL tempo2 = eltrouve.filsD;
 			while(!estFeuille(tempo2)){
 				tempo2 = tempo2.filsG;
 			}
+
+			AVL tempo = new AVL(eltrouve.parent, tempo2.valeur, eltrouve.filsG, eltrouve.filsD);
 			
-			AVL tempo = new AVL(this.parent, tempo2.recupValeur(), this.filsG, this.filsD);//deseq pas bon
-			this.parent = this.parent;
-			this.valeur = (T)tempo2.valeur;
-			this.filsG = this.filsG;
-			this.filsD = this.filsD;
 			
-			tempo2 = new AVL(null);
+			eltrouve.parent = tempo.parent;
+			eltrouve.valeur = (T)tempo.valeur;
+			eltrouve.filsG = tempo.filsG;
+			eltrouve.filsD = tempo.filsD;
+			tempo2 = tempo2.filsD; // On recolle l'arbre avec l'arbre de l'element remplacé 
+			
 		}
 	}
 	
