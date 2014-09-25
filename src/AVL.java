@@ -141,7 +141,7 @@ class AVL<T extends Comparable<T>>{
     //////////////////////////////:
 
 
-	//Principe: On insère l'élément 
+	//Principe: On insère l'élément comme dans un ABR et ensuite on vérifie l'équilibre de tout les AVL parcouru
 	//Entrée: un AVL et l'élément a inseré
 	//Sortie: L'AVL avec l'élement inséré
     public AVL insertionAVL(AVL arbre,T element){
@@ -154,9 +154,9 @@ class AVL<T extends Comparable<T>>{
     	//On insère normalement l'élément dans l'arbre (comme un ABR)
 
     	if(arbre == null)
-    		res = new AVL(element);
+    		res = new AVL<T>(element);
 
-    	else if(element.compareTo(arbre.valeur) < 0)
+    	else if(element.compareTo((T) arbre.valeur) < 0)
     		arbre.filsG = insertionAVL(arbre.filsG, element);
     	else
     		arbre.filsD = insertionAVL(arbre.filsD, element);
@@ -167,16 +167,16 @@ class AVL<T extends Comparable<T>>{
     	//si le noeud est désèquilibré il y a quatre cas : 
 
     	//Rotation droite-droite:
-    	if(arbre.deseq > 1 && element.compareTo(arbre.filsG.)) < 0)
+    	if(arbre.deseq > 1 && element.compareTo((T) arbre.filsG) < 0)
 			arbre.rotationD();
 		//Rotation gauche-gauche:
-		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) > 0)
+		else if(arbre.deseq < -1 && element.compareTo((T) arbre.filsD) > 0)
 			arbre.rotationG();
 		//Rotation droite-gauche:
-		else if(arbre.deseq > 1 && element.compareTo(arbre.filsG) > 0)
+		else if(arbre.deseq > 1 && element.compareTo((T) arbre.filsG) > 0)
 			arbre.rotationDG();
 		//Rotation gauche-droite:
-		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) < 0)
+		else if(arbre.deseq < -1 && element.compareTo((T) arbre.filsD) < 0)
 			arbre.rotationGD();
 
 
@@ -245,6 +245,11 @@ class AVL<T extends Comparable<T>>{
 		}
 	}
 	
+	//Principe: On recherche un élément à partir d'un arbre et on recherche récursivement sur tout les sous arbres gauche et droite
+	//Entrée: un élément qui doit exister dans l'AVL
+	//Sortie: l'AVL contenant comme valeur l'élément recherché
+
+
 	public AVL rechercheNoeud(T element){
 		AVL resultat;
 		
