@@ -40,26 +40,47 @@ class AVL<T extends Comparable<T>>{
 		return resultat;
 	}
 	
-	//Principe : cette procedure permet de calculer le desequilibre d'un arbre et modifie l'attribu
-	//deseq dans la structure de données pour pouvoir retenir la valeur de desequilibre
-	//Entrée : un arbre de type AVL
-	//Sortie : l'attribut deseq est modifié
-	public void calculDesequilibre(AVL arbre){
-		int hauteurMaxG = recupLongueurMaxG(arbre);
-		int hauteurMaxD = recupLongueurMaxD(arbre);
-		int desequilibre = hauteurMaxG - hauteurMaxD;
+	//Principe : cette procedure permet de calculer le desequilibre d'un arbre ou sous arbre
+	//Entrée :
+	//Sortie :
+	public int calculDesequilibre(){
+		//cette variable va contenir le resultat que la fonction doit retourner
+		//ce sera un entier correspondant au desequilbre
+		int resultat;
 		
-		arbre.deseq = desequilibre;
+		if (filsG==null) {
+	        if (filsD==null){
+	        	resultat = 0; //si le fils gauche et le fils droit sont vide alors le desequilibre sera de 0
+	        }
+	        else{
+	        	//si il n y a pas de fils gauche mais il y a un fils droit alors le desequilibre sera la profondeur du fils droit en negatif
+	        	resultat = (-filsD.profondeur()); 
+	        }
+	    }
+	    else {
+	        if (filsD==null){
+	        	//si le fils gauche n'est pas null mais le fils droit est null on stock dans 
+	        	//la variable resultat la profondeur du fils gauche + 1
+	        	resultat = (filsG.profondeur());
+	        	}
+	        else{
+	        	resultat = (filsG.profondeur() - filsD.profondeur());
+	        }
+	    }
+		
+		return resultat;
 	}
 	
 	//Principe : 
 	public int profondeur() {
+		//cette variable va contenir le resultat que la fonction doit retourner
+		//ce sera un entier correspondant au desequilbre
 		int resultat;
 		
         if (filsG==null) {
             if (filsD==null){
             	resultat = 0;
-            } 
+            }
             else{
             	resultat = (1+filsD.profondeur());
             } 
@@ -75,17 +96,49 @@ class AVL<T extends Comparable<T>>{
         return resultat;
     }
 	
-	public int recupLongueurMaxG(AVL arbre){
-		int hauteurMaxG = 1;
-		hauteurMaxG += arbre.filsG.profondeur();
-		return hauteurMaxG;
-	}
-	
-	public int recupLongueurMaxD(AVL arbre){
-		int hauteurMaxD = 1;
-		hauteurMaxD += arbre.filsD.profondeur();
-		return hauteurMaxD;
-	}
+ ///////////////////////////////////
+    
+    //fonctions de rotation à gauche et à droite            
+    public AVL rotationG() {
+    	AVL b ;
+        b=this.filsD;
+        if(b!=null) {
+            this.filsD=b.filsG;
+            b.filsG=this;
+        }
+        return b;
+    }
+    
+    public AVL rotationD() {
+    	AVL b ;
+        b=this.filsG;
+        if(b!=null) {
+            this.filsG=b.filsD;
+            b.filsD=this;
+        }
+        return b;
+    }
+    ///////////////////////////////:
+    
+    //composées de rotation
+    public AVL rotationDG() {
+        /* rotation droite autour fils droit et rotation gauche autour racine */
+    	AVL b;
+        b=this;
+        b.filsD=b.filsD.rotationD();
+        b=b.rotationG();
+        return b;
+    }
+    
+    public AVL rotationGD() {
+        /* rotation gauche autour fils gauche et rotation droite autour racine */
+    	AVL b;
+        b=this;
+        b.filsG=b.filsG.rotationG();
+        b=b.rotationD();
+        return b;
+    }
+    //////////////////////////////:
 	
 	public void insertionAVL(AVL arbre){
 		
