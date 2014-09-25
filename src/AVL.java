@@ -50,27 +50,9 @@ class AVL<T extends Comparable<T>>{
 	public int calculDesequilibre(){
 		//cette variable va contenir le resultat que la fonction doit retourner
 		//ce sera un entier correspondant au desequilbre
-		int resultat;
+		int resultat;		
 		
-		if (filsG==null) {
-	        if (filsD==null){
-	        	resultat = 0; //si le fils gauche et le fils droit sont vide alors le desequilibre sera de 0
-	        }
-	        else{
-	        	//si il n y a pas de fils gauche mais il y a un fils droit alors le desequilibre sera la profondeur du fils droit en negatif
-	        	resultat = (-(1 + filsD.profondeur())); 
-	        }
-	    }
-	    else {
-	        if (filsD==null){
-	        	//si le fils gauche n'est pas null mais le fils droit est null on stock dans 
-	        	//la variable resultat la profondeur du fils gauche + 1
-	        	resultat = (1 + filsG.profondeur());
-	        	}
-	        else{
-	        	resultat = 1 + (filsG.profondeur() - filsD.profondeur());
-	        }
-	    }
+	    resultat = (1 + filsG.profondeur()) - (1 + filsD.profondeur());	   
 		
 		return resultat;
 	}
