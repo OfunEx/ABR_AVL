@@ -102,45 +102,24 @@ class AVL<T extends Comparable<T>>{
     
     //fonctions de rotation à gauche et à droite            
     public AVL rotationG() {
-    	AVL b ;
-        b=this.filsD;
-        if(b!=null) {
-            this.filsD=b.filsG;
-            b.filsG=this;
-        }
-        return b;
+    	AVL T2 = this.filsD.filsG;
+    	
+    	this.filsD.filsG = this;
+    	this.filsD = T2;
+    	
+    	return this.filsD;
     }
     
     public AVL rotationD() {
-    	AVL b ;
-        b=this.filsG;
-        if(b!=null) {
-            this.filsG=b.filsD;
-            b.filsD=this;
-        }
-        return b;
+    	
+    	AVL T2 = this.filsG.filsD;
+    	
+    	(this.filsG).filsD = this;
+    	this.filsG = T2;
+    	
+    	return this.filsG;
+    	
     }
-    ///////////////////////////////:
-    
-    //composées de rotation
-    public AVL rotationDG() {
-        /* rotation droite autour fils droit et rotation gauche autour racine */
-    	AVL b;
-        b=this;
-        b.filsD=b.filsD.rotationD();
-        b=b.rotationG();
-        return b;
-    }
-    
-    public AVL rotationGD() {
-        /* rotation gauche autour fils gauche et rotation droite autour racine */
-    	AVL b;
-        b=this;
-        b.filsG=b.filsG.rotationG();
-        b=b.rotationD();
-        return b;
-    }
-    //////////////////////////////:
 
 
 	//Principe: On insère l'élément comme dans un ABR et ensuite on vérifie l'équilibre de tout les AVL parcouru
@@ -165,7 +144,8 @@ class AVL<T extends Comparable<T>>{
 
     	// On calcule le facteur de désèquilibre de chaque ancêtre de ce noeud
     	this.deseq = this.calculDesequilibre();
-
+    	System.out.println(deseq);
+    	
     	//si le noeud est désèquilibré il y a quatre cas : 
 
     	//Rotation droite-droite:
@@ -174,12 +154,19 @@ class AVL<T extends Comparable<T>>{
 		//Rotation gauche-gauche:
 		else if(this.deseq < -1 && element.compareTo((T) this.filsD.valeur) > 0)
 			this.rotationG();
-		//Rotation droite-gauche:
+		//Rotation e:
 		else if(this.deseq > 1 && element.compareTo((T) this.filsG.valeur) > 0)
-			this.rotationDG();
+		{
+			this.filsG.rotationG();
+			this.rotationD();
+		}	
 		//Rotation gauche-droite:
 		else if(this.deseq < -1 && element.compareTo((T) this.filsD.valeur) < 0)
-			this.rotationGD();
+		{
+			System.out.println(element.compareTo((T) this.filsD.valeur) < 0);
+			this.filsD.rotationD();
+			this.rotationG();
+    	}
     	
     	return res;
     }
@@ -325,15 +312,6 @@ class AVL<T extends Comparable<T>>{
 		}
 		
 		return resultat;
-	}
-	
-	
-	
-	public String afficher(){
-		
-		String affichage = "root : " + valeur + " | filsG : " + (filsG == null ? "(null)" : filsG.valeur) 
-							+ " | filsD : " + (filsD == null ? "(null)" : filsD.valeur);
-		return affichage;
 	}
 
 }
