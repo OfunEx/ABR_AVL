@@ -260,10 +260,14 @@ class AVL<T extends Comparable<T>>{
 
 
 	public AVL rechercheNoeud(T element){
-		AVL resultat;
+		AVL resultat = null;
 		
 		if(this.valeur.compareTo(element) == 0){
-			resultat = this;
+			resultat.parent = this.parent;
+			resultat.valeur = (T)this.valeur;
+			resultat.filsG = this.filsG;
+			resultat.filsD = this.filsD;
+			
 		}
 		else{
 			this.filsG.rechercheNoeud(element);
