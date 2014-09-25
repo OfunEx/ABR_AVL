@@ -139,27 +139,48 @@ class AVL<T extends Comparable<T>>{
         return b;
     }
     //////////////////////////////:
-	
-    public void insertionAVL(T element){
+
+
+	//Principe: On insère l'élément 
+	//Entrée: un AVL et l'élément a inseré
+	//Sortie: L'AVL avec l'élement inséré
+    public AVL insertionAVL(AVL arbre,T element){
         
-        if(element.compareTo(this.valeur) > 0 ){
-            if(this.filsD == null){
-            AVL arbre = new AVL(element);
-                this.filsD = arbre;
-            }
-            else{
-                this.filsD.insertionAVL(element);
-            }
-        }
-        else{
-            if(this.filsG == null){
-            AVL arbre = new AVL(element);
-                this.filsG = arbre;
-            }
-            else{
-                this.filsG.insertionAVL(element);
-            }
-        }
+    	AVL res; //variable contenant l'AVL qu'on va retourner
+
+    	res = arbre;
+
+
+    	//On insère normalement l'élément dans l'arbre (comme un ABR)
+
+    	if(arbre == null)
+    		res = new AVL(element);
+
+    	else if(element.compareTo(arbre.valeur) < 0)
+    		arbre.filsG = insertionAVL(arbre.filsG, element);
+    	else
+    		arbre.filsD = insertionAVL(arbre.filsD, element);
+
+    	// On calcule le facteur de désèquilibre de chaque ancêtre de ce noeud
+    	arbre.deseq = arbre.calculDesequilibre();
+
+    	//si le noeud est désèquilibré il y a quatre cas : 
+
+    	//Rotation droite-droite:
+    	if(arbre.deseq > 1 && element.compareTo(arbre.filsG.)) < 0)
+			arbre.rotationD();
+		//Rotation gauche-gauche:
+		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) > 0)
+			arbre.rotationG();
+		//Rotation gauche-droite:
+		else if(arbre.deseq > 1 && element.compareTo(arbre.filsG) < 0)
+			arbre.rotationGD();
+		//Rotation droite-gauche:
+		else if(arbre.deseq < -1 && element.compareTo(arbre.filsD) > 0)
+			arbre.rotationDG();
+
+
+    	return res;
     }
 
 	
