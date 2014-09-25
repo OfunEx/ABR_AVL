@@ -186,8 +186,34 @@ class AVL<T extends Comparable<T>>{
 		}		
 	}
 	
-	public void suppressionAVL(){
+	public void suppressionAVL(T element){
 		
+		if(estFeuille(this)){
+			//on supprime
+		}
+		else if(this.filsG!=null){
+			//si x n'a qu'un fils, on le remplace par son fils
+		}
+		else if(this.filsD!=null){
+			//si x n'a qu'un fils, on le remplace par son fils
+		}
+		else{
+			//si x a 2 fils, on le remplace par le plus petit element de son sous arbre droit
+		}
+	}
+	
+	public AVL rechercheNoeud(T element){
+		AVL resultat;
+		
+		if(this.valeur.compareTo(element) == 0){
+			resultat = this;
+		}
+		else{
+			this.filsG.rechercheNoeud(element);
+			this.filsD.rechercheNoeud(element);
+		}
+		
+		return resultat;
 	}
 
 }
