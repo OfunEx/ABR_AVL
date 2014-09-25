@@ -208,18 +208,32 @@ class AVL<T extends Comparable<T>>{
 	}
 	
 	public void suppressionAVL(T element){
-		
+		//recherche element
 		if(estFeuille(this)){
 			//on supprime
+			this = new AVL(null);
 		}
-		else if(this.filsG!=null){
+		
+		else if(this.filsG=null){
 			//si x n'a qu'un fils, on le remplace par son fils
+			AVL tempo = new AVL(this.parent, this.filsD.recupValeur(), this.filsD.filsG, this.filsD.filsG, 0);
+			this = tempo;
 		}
-		else if(this.filsD!=null){
+		else if(this.filsD=null){
 			//si x n'a qu'un fils, on le remplace par son fils
+			AVL tempo = new AVL(this.parent, this.filsG.recupValeur(), this.filsG.filsG, this.filsG.filsD, 0);
+			this = tempo;
 		}
 		else{
 			//si x a 2 fils, on le remplace par le plus petit element de son sous arbre droit
+			AVL tempo2 = this.filsD;
+			while(!estfeuille(tempo2)){
+				tempo2 = tempo2.filsG;
+			}
+			
+			AVL tempo = new AVL(this.parent, tempo2.recupValeur(), this.filsG, this.filsD, 0 );//deseq pas bon
+			this = tempo;
+			tempo2 = new AVL(null);
 		}
 	}
 	
