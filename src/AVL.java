@@ -40,6 +40,10 @@ class AVL<T extends Comparable<T>>{
 		return resultat;
 	}
 	
+	public void equilibrage(AVL arbre){
+		
+	}
+	
 	//Principe : cette procedure permet de calculer le desequilibre d'un arbre ou sous arbre
 	//Entrée :
 	//Sortie :
@@ -54,17 +58,17 @@ class AVL<T extends Comparable<T>>{
 	        }
 	        else{
 	        	//si il n y a pas de fils gauche mais il y a un fils droit alors le desequilibre sera la profondeur du fils droit en negatif
-	        	resultat = (-filsD.profondeur()); 
+	        	resultat = (-(1 + filsD.profondeur())); 
 	        }
 	    }
 	    else {
 	        if (filsD==null){
 	        	//si le fils gauche n'est pas null mais le fils droit est null on stock dans 
 	        	//la variable resultat la profondeur du fils gauche + 1
-	        	resultat = (filsG.profondeur());
+	        	resultat = (1 + filsG.profondeur());
 	        	}
 	        else{
-	        	resultat = (filsG.profondeur() - filsD.profondeur());
+	        	resultat = 1 + (filsG.profondeur() - filsD.profondeur());
 	        }
 	    }
 		
