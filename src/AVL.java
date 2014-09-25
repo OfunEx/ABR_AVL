@@ -40,10 +40,6 @@ class AVL<T extends Comparable<T>>{
 		return resultat;
 	}
 	
-	public void equilibrage(AVL arbre){
-		
-	}
-	
 	//Principe : cette procedure permet de calculer le desequilibre d'un arbre ou sous arbre
 	//Entrée :
 	//Sortie :
@@ -144,24 +140,50 @@ class AVL<T extends Comparable<T>>{
     }
     //////////////////////////////:
 	
-	public void insertionAVL(AVL arbre){
-		
-		if(arbre.valeur.compareTo(this.valeur) > 0 ){
-			if(this.filsD == null){
-				this.filsD = arbre;
+    public void insertionAVL(T element){
+        
+        if(element.compareTo(this.valeur) > 0 ){
+            if(this.filsD == null){
+            AVL arbre = new AVL(element);
+                this.filsD = arbre;
+            }
+            else{
+                this.filsD.insertionAVL(element);
+            }
+        }
+        else{
+            if(this.filsG == null){
+            AVL arbre = new AVL(element);
+                this.filsG = arbre;
+            }
+            else{
+                this.filsG.insertionAVL(element);
+            }
+        }
+    }
+
+	
+	public void parcoursDesequilibre(AVL arbre){
+		if(filsG==null){
+			if(filsD==null){
+				this.deseq = 0;
 			}
 			else{
-				this.filsD.insertionAVL(arbre);
+				this.deseq = arbre.calculDesequilibre();
+				arbre.parcoursDesequilibre(filsD);
 			}
 		}
 		else{
-			if(this.filsG == null){
-				this.filsG = arbre;
+			if(filsD==null){
+				this.deseq = arbre.calculDesequilibre();
+				arbre.parcoursDesequilibre(filsG);
 			}
 			else{
-				this.filsG.insertionAVL(arbre);
+				this.deseq = arbre.calculDesequilibre();
+				arbre.parcoursDesequilibre(filsG);
+				arbre.parcoursDesequilibre(filsD);				
 			}
-		}
+		}		
 	}
 	
 	public void suppressionAVL(){
