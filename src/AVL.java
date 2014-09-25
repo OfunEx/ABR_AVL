@@ -209,7 +209,7 @@ class AVL<T extends Comparable<T>>{
 	}
 	
 	public void suppressionAVL(T element){
-		//recherche element
+		//recherche de element
 		AVL eltrouve= this.rechercheNoeud(element);
 		
 		if(estFeuille(eltrouve)){
@@ -218,6 +218,8 @@ class AVL<T extends Comparable<T>>{
 			eltrouve.valeur = null;
 			eltrouve.filsG = null;
 			eltrouve.filsD = null;
+			
+			
 		}
 		
 		else if(eltrouve.filsG==null){
@@ -227,6 +229,8 @@ class AVL<T extends Comparable<T>>{
 			eltrouve.valeur = (T)eltrouve.filsD.valeur;
 			eltrouve.filsG = eltrouve.filsD.filsG;
 			eltrouve.filsD = eltrouve.filsD.filsG;
+			
+			
 		}
 		else if(eltrouve.filsD==null){
 			//si x n'a qu'un fils, on le remplace par son fils
@@ -235,6 +239,7 @@ class AVL<T extends Comparable<T>>{
 			eltrouve.valeur = (T)tempo.valeur;
 			eltrouve.filsG = tempo.filsG;
 			eltrouve.filsD = tempo.filsD;
+			
 		}
 		else{
 			//si x a 2 fils, on le remplace par le plus petit element de son sous arbre droit
@@ -250,11 +255,55 @@ class AVL<T extends Comparable<T>>{
 			eltrouve.valeur = (T)tempo.valeur;
 			eltrouve.filsG = tempo.filsG;
 			eltrouve.filsD = tempo.filsD;
-			tempo2 = tempo2.filsD; // On recolle l'arbre avec l'arbre de l'element remplacé 
+			tempo2 = tempo2.filsD; // On recolle l'arbre de racine eltrouve avec l'arbre de l'element remplacé 	
 			
 		}
+		
+		parcoursDesequilibre(this); //calcul des desequilibres
+		
+		//rééquilibrage si necessaire
+		this.equilibrage();
 	}
 	
+	public AVL equilibrage() {
+		AVL tmp = null;
+		if (estFeuille(tmp)){
+			tmp = this;
+		}
+		
+		else {
+			tmp = this;
+			int desequilibre = tmp.deseq;
+			if (desequilibre >=1){
+				if (tmp.filsG != null) {
+					if (tmp.filsG.deseq<0){
+						tmp.filsG = tmp.filsG.rotationG();
+					tmp = tmp.rotationD();
+					}
+				}
+			}
+			if (desequilibre <=1){
+				if (tmp.filsD != null){
+					if (tmp.filsD.deseq >0){
+						tmp.filsD = tmp.filsD.rotationD();
+					}
+					tmp = tmp.rotationG();
+				}
+			}
+			
+			if (tmp.filsG != null){
+				tmp.filsG = tmp.filsG.equilibrage();
+			}
+			if (tmp.filsD != null) {
+				tmp.filsD = tmp.filsD.equilibrage();
+			}
+			
+		}
+		return(tmp);
+	}
+		
+
+
 	//Principe: On recherche un élément à partir d'un arbre et on recherche récursivement sur tout les sous arbres gauche et droite
 	//Entrée: un élément qui doit exister dans l'AVL
 	//Sortie: l'AVL contenant comme valeur l'élément recherché
