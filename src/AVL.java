@@ -214,25 +214,33 @@ class AVL<T extends Comparable<T>>{
 			this = new AVL(null);
 		}
 		
-		else if(this.filsG=null){
+		else if(this.filsG==null){
 			//si x n'a qu'un fils, on le remplace par son fils
-			AVL tempo = new AVL(this.parent, this.filsD.recupValeur(), this.filsD.filsG, this.filsD.filsG, 0);
-			this = tempo;
+			this.parent = this.parent;
+			this.valeur = (T)this.filsD.valeur;
+			this.filsG = this.filsD.filsG;
+			this.filsD = this.filsD.filsG;
 		}
-		else if(this.filsD=null){
+		else if(this.filsD==null){
 			//si x n'a qu'un fils, on le remplace par son fils
-			AVL tempo = new AVL(this.parent, this.filsG.recupValeur(), this.filsG.filsG, this.filsG.filsD, 0);
-			this = tempo;
+			this.parent = this.parent;
+			this.valeur = (T)this.filsG.valeur;
+			this.filsG = this.filsG.filsG;
+			this.filsD = this.filsG.filsD;
 		}
 		else{
 			//si x a 2 fils, on le remplace par le plus petit element de son sous arbre droit
 			AVL tempo2 = this.filsD;
-			while(!estfeuille(tempo2)){
+			while(!estFeuille(tempo2)){
 				tempo2 = tempo2.filsG;
 			}
 			
-			AVL tempo = new AVL(this.parent, tempo2.recupValeur(), this.filsG, this.filsD, 0 );//deseq pas bon
-			this = tempo;
+			AVL tempo = new AVL(this.parent, tempo2.recupValeur(), this.filsG, this.filsD);//deseq pas bon
+			this.parent = this.parent;
+			this.valeur = (T)tempo2.valeur;
+			this.filsG = this.filsG;
+			this.filsD = this.filsD;
+			
 			tempo2 = new AVL(null);
 		}
 	}
