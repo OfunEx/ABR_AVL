@@ -1,13 +1,14 @@
-////////////////////////////////////////////////
-// Guillaume Besse / Etudiant : 33003610      //
-// Kevin Randria / Etudiant : 29000388        //
-// Xavier Chane / Etudiant : 31002463         //
-//                                            //
-// Septembre 2014                             //
-//                                            //
-// L3 Informatique - Université de la Réunion //
-// Cours de Méthodologie et Projet			  //
-////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+// Guillaume Besse / Etudiant : 33003610                   //
+// Kevin Randria / Etudiant : 29000388                     //
+// Xavier Chane / Etudiant : 31002463                      //
+//                                                         //
+// Septembre 2014                                          //
+//                                                         //
+// L3 Informatique - Université de la Réunion              //
+// Cours de Méthodologie et Projet		                   //
+// Etude sur la libraire de gestion d'un arbre bianire AVL //
+/////////////////////////////////////////////////////////////
 
 
 // Classe des Arbres H-Equilibrés de recherche ou AVL 
