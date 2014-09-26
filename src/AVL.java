@@ -148,7 +148,7 @@ class AVL<T extends Comparable<T>>{
     	AVL T2 = this.filsD.filsG;
     	
     	this.filsD.filsG = this; //le fils gauche du fils droit de l'arbre deviant alors l'arbre lui meme
-    	this.filsD = T2; //et le fils droit de l'arbresur lequel on est devient T2
+    	this.filsD = T2; //et le fils droit de l'arbre sur lequel on est devient T2
     	
     	return this.filsD;
     }
@@ -161,9 +161,8 @@ class AVL<T extends Comparable<T>>{
     	//le fils droit du fils gauche de l'arbre
     	AVL T2 = this.filsG.filsD;
     	
-    	(this.filsG).filsD = this; //le fils droit du fils gauche de l'arbre devient alors l'arbre lui meme
-    	
-    	this.filsG = T2; //le fils fils gauche de l'arbre prend le contenu de T2
+    	this.filsG.filsD = this; //le fils droit du fils gauche de l'arbre devient alors l'arbre lui meme
+    	this.filsG = T2; //le fils gauche de l'arbre prend le contenu de T2
     	
     	return this.filsG;
     	
