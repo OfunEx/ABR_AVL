@@ -144,7 +144,6 @@ class AVL<T extends Comparable<T>>{
 
     	// On calcule le facteur de désèquilibre de chaque ancêtre de ce noeud
     	this.deseq = this.calculDesequilibre();
-    	System.out.println(deseq);
     	
     	//si le noeud est désèquilibré il y a quatre cas : 
 
@@ -154,16 +153,15 @@ class AVL<T extends Comparable<T>>{
 		//Rotation gauche-gauche:
 		else if(this.deseq < -1 && element.compareTo((T) this.filsD.valeur) > 0)
 			this.rotationG();
-		//Rotation e:
+		//Rotation gauche-droite:
 		else if(this.deseq > 1 && element.compareTo((T) this.filsG.valeur) > 0)
 		{
 			this.filsG.rotationG();
 			this.rotationD();
 		}	
-		//Rotation gauche-droite:
+		//Rotation droite-gauche:
 		else if(this.deseq < -1 && element.compareTo((T) this.filsD.valeur) < 0)
 		{
-			System.out.println(element.compareTo((T) this.filsD.valeur) < 0);
 			this.filsD.rotationD();
 			this.rotationG();
     	}
