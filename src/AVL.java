@@ -1,23 +1,44 @@
-import java.io.Console;
+////////////////////////////////////////////////
+// Guillaume Besse / Etudiant : 33003610      //
+// Kevin Randria / Etudiant : 29000388        //
+// Xavier Chane / Etudiant : 31002463         //
+//                                            //
+// Septembre 2014                             //
+//                                            //
+// L3 Informatique - Université de la Réunion //
+// Cours de Méthodologie et Projet			  //
+////////////////////////////////////////////////
 
 
 // Classe des Arbres H-Equilibrés de recherche ou AVL 
 class AVL<T extends Comparable<T>>{
-
-	public AVL parent;
-	public T valeur;
-	public AVL filsG;
-	public AVL filsD;
-	public int deseq;
+	// <T> en java represente un type generique dans lequel on peut mettre 
+	//n'importe quel type de variable
+	public AVL parent; //cet attribut représente le parent de l'arbre actuel
+	public T valeur; //cet attribut représente la valeur contenu dans l'abre
+	public AVL filsG; //cet atttribut contient le fils gauche de l'arbre si il en a un
+	public AVL filsD; //cet attribut contient le fils droit de l'arbre si il en a un
+	public int deseq; //cet attribut contient le désequilibre de l'arbre
 	
+	//Principe : il s agit du constructeur propre a java 
+	//dans le cadre de la programmation oriente objet
+	//il permet de construire un objet juste avec une valeur de type T
+	//Entree : une valeur de type T
+	//Sortie : un objet de type AVL est crée
 	public AVL(T valeur){
-		this.parent = null;
-		this.valeur = valeur;
-		this.filsG = null;
-		this.filsD = null;	
+		this.parent = null; 
+		this.valeur = valeur; 
+		this.filsG = null; 
+		this.filsD = null; 
 		this.deseq = 0;
 	}
 	
+	//Principe : il s'agit d'un constructeur propre a java dont on reecris la signature
+	//pour pouvoir le reutiliser mais avec des parametre different
+	//Entree : Un arbre de type AVL qui sera l'attribut parent
+	//une valeur de type T qui sera la valeur de l'arbre
+	//Deux arbre de type AVL qui seront le fils gauche et le fils droit
+	//Sortie : un objet de type AVL est cree
 	public AVL(AVL parent, T valeur, AVL filsG, AVL filsD){
 		this.parent = parent;
 		this.valeur = valeur;
@@ -26,25 +47,26 @@ class AVL<T extends Comparable<T>>{
 		this.deseq = 0;
 	}
 	
-	public T recupValeur(){
-		return valeur;
-	}
-	
 	//Principe : cette fonction permet de savoir si un sous arbre est une feuille
 	//Entrée : un arbre de type AVL
 	//Sortie : une valeur booleene Vrai ou Fausse qui indique si un arbre est une feuille
+	//Vrai si l'arbre est une fueille et Faux si l'arbre n'est pas une feuille
 	public boolean estFeuille(AVL arbre){
-		boolean resultat = false;
+		boolean resultat = false; //resultat va contenir Vrai ou Faux pour le retour
 		
+		//on verifie si l'attribut fils gauche et l'attribut fils droit
+		//de l'arbre sont vides
+		//si c'est le cas alors la fonction va renvoyer Vrai
 		if(arbre.filsG == null && arbre.filsD == null){
 			resultat = true;
 		}
 		return resultat;
 	}
 	
-	//Principe : cette procedure permet de calculer le desequilibre d'un arbre ou sous arbre
-	//Entrée :
-	//Sortie :
+	//Principe : cette fonction permet de calculer le desequilibre d'un arbre ou sous arbre
+	//de façon recursive
+	//Entrée : aucun parametre
+	//Sortie : un entier positif ou negatif correspondant au desequilibre de l'arbre ou du sous arbre
 	public int calculDesequilibre(){
 		//cette variable va contenir le resultat que la fonction doit retourner
 		//ce sera un entier correspondant au desequilbre
@@ -55,7 +77,8 @@ class AVL<T extends Comparable<T>>{
 	        	resultat = 0; //si le fils gauche et le fils droit sont vide alors le desequilibre sera de 0
 	        }
 	        else{
-	        	//si il n y a pas de fils gauche mais il y a un fils droit alors le desequilibre sera la profondeur du fils droit en negatif
+	        	//si il n y a pas de fils gauche mais il y a un fils droit 
+	        	//alors le desequilibre sera la profondeur du fils droit en negatif
 	        	resultat = (-(1 + filsD.profondeur())); 
 	        }
 	    }
@@ -66,6 +89,7 @@ class AVL<T extends Comparable<T>>{
 	        	resultat = (1 + filsG.profondeur());
 	        	}
 	        else{
+	        	//sinon le resultat est la hauteur gauche moin la hauteur droite
 	        	resultat = (1 + filsG.profondeur()) - (1 + filsD.profondeur());
 	        }
 	    }
@@ -73,7 +97,10 @@ class AVL<T extends Comparable<T>>{
 		return resultat;
 	}
 	
-	//Principe : 
+	//Principe : calcul la profondeur max d'un arbre ou sous arbre
+	//de façon recursive
+	//Entree : aucun parametre
+	//Sortie : renvoie un entier correspondant a la profondeur maximum de l'arbre ou du sous arbre
 	public int profondeur() {
 		//cette variable va contenir le resultat que la fonction doit retourner
 		//ce sera un entier correspondant au desequilbre
@@ -81,18 +108,27 @@ class AVL<T extends Comparable<T>>{
 		
         if (filsG==null) {
             if (filsD==null){
-            	resultat = 0;
+            	resultat = 0; // si l'arbre n'a ni fils gauche ou fils droit 
+            				  //alors la profondeur sera 0
             }
             else{
+            	//si l'arbre a un fils droit mais pa de fils gauche
+            	//alors on renvoie la profondeur du fils droit de façon recursive
             	resultat = (1+filsD.profondeur());
             } 
         }
         else {
             if (filsD==null){
+            	//si il a un fils gauche mais pas de fils droit
+            	//alors on renvoie la pronfondeur du fils gauche de façon recursive
             	resultat = (1+filsG.profondeur());
             }
             else{
+            	//si l'arbre a deux fils on parcours recursivment les deux fils
+            	//et on prend celui qui a la plus grande profondeur
                 resultat = (1+java.lang.Math.max(filsD.profondeur(),filsG.profondeur()));
+                //java.lang.Math.max(v1,v2) est une fonction de java
+            	//qui retourne la valeur la plus grande entre v1 et v2
             }
         }        
         return resultat;
@@ -100,22 +136,33 @@ class AVL<T extends Comparable<T>>{
 	
  ///////////////////////////////////
     
-    //fonctions de rotation à gauche et à droite            
+    //fonctions de rotation à gauche et à droite   
+	
+	//Principe : permet d'effectuer une rotation gauche d'apres la theorie sur les AVL
+	//Entree : aucun parametre
+	//Sortie : un arbre AVL sur lequel on a effectuer une rotation gauche
     public AVL rotationG() {
+    	//la variable de type AVL T2 contient de façon temporaire
+    	//le fils gauche du fils droit de l'arbre sur lequel on est
     	AVL T2 = this.filsD.filsG;
     	
-    	this.filsD.filsG = this;
-    	this.filsD = T2;
+    	this.filsD.filsG = this; //le fils gauche du fils droit de l'arbre deviant alors l'arbre lui meme
+    	this.filsD = T2; //et le fils droit de l'arbresur lequel on est devient T2
     	
     	return this.filsD;
     }
     
+    //Principe : permet d'effectuer une rotation droite d'apres la theorie sur les AVL
+    //Entree : aucun parametre
+    //Sortie : un arbre AVL sur lequel on a effectuer une rotation droite
     public AVL rotationD() {
-    	
+    	//la variable de type AVL T2 contient de façon temporaire
+    	//le fils droit du fils gauche de l'arbre
     	AVL T2 = this.filsG.filsD;
     	
-    	(this.filsG).filsD = this;
-    	this.filsG = T2;
+    	(this.filsG).filsD = this; //le fils droit du fils gauche de l'arbre devient alors l'arbre lui meme
+    	
+    	this.filsG = T2; //le fils fils gauche de l'arbre prend le contenu de T2
     	
     	return this.filsG;
     	
@@ -169,23 +216,34 @@ class AVL<T extends Comparable<T>>{
     	return res;
     }
 
-	
+	//Principe : cette procedure parcours tous l'arbre recursivement
+    //et applique la fonction de calculDesequilibre a chaque sommet de l'arbre
+    //Entree : la racine de l'arbre
+    //Sortie : l'attribut deseq de chaque sommet de l'arbre total est changé par un entier
+    //qui correspond a son desequilbre actuel
 	public void parcoursDesequilibre(AVL arbre){
 		if(filsG==null){
 			if(filsD==null){
-				this.deseq = 0;
+				this.deseq = 0; //si le sommet est une feuille alors son desequilbre est de 0
 			}
 			else{
+				//si le sommet a un fils droit mais pas de fils gauche
+				//alors on calcul son desequilibre et on contiinu la recursivité sur son fils
 				this.deseq = arbre.calculDesequilibre();
 				arbre.parcoursDesequilibre(filsD);
 			}
 		}
 		else{
 			if(filsD==null){
+				///si il a un fils gauche mais pas de fils droit
+				//alors on calcul le desequilibre du sommet et on continu la recursivité sur son fils gauche
 				this.deseq = arbre.calculDesequilibre();
 				arbre.parcoursDesequilibre(filsG);
 			}
 			else{
+				//si il a deux fils
+				//on calcul le desequilibre du sommet
+				//et on applique la recursivité sur son fils gauche et son fils droit
 				this.deseq = arbre.calculDesequilibre();
 				arbre.parcoursDesequilibre(filsG);
 				arbre.parcoursDesequilibre(filsD);				
@@ -305,12 +363,15 @@ class AVL<T extends Comparable<T>>{
 	//Principe: On recherche un élément à partir d'un arbre et on recherche récursivement sur tout les sous arbres gauche et droite
 	//Entrée: un élément qui doit exister dans l'AVL
 	//Sortie: l'AVL contenant comme valeur l'élément recherché
-
-
 	public AVL rechercheNoeud(T element){
+		//resultat va contenir l'AVL qui sera trouver a la fin de la recherche recursive
 		AVL resultat = null;
 		
+		//compareTo est une façon en java de comparer les type generique entre eux
+		//ici on compare si la valeur de l'arbre et equivalente l'element passer en parametre
 		if(this.valeur.compareTo(element) == 0){
+			//si la comparaison est correct alors 
+			//on rempli lees attribut de resultat avec les attribut de l'arbre qui est trouve pendant la recherche
 			resultat.parent = this.parent;
 			resultat.valeur = (T)this.valeur;
 			resultat.filsG = this.filsG;
@@ -318,6 +379,8 @@ class AVL<T extends Comparable<T>>{
 			
 		}
 		else{
+			//si la comparaison ne fonctionne pas alors on appelle
+			//recursivement la fonction de recherche sur les fils de l'arbre
 			this.filsG.rechercheNoeud(element);
 			this.filsD.rechercheNoeud(element);
 		}
